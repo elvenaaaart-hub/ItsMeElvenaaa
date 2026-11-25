@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elvena - Portfolio and Prices</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f4f1ff; --grid:#e6e0ff; --paper:#fffdff; --ink:#5a4fa8; --soft:#6c66ad;
+  --lilac:#ddd0ff; --mint:#cfe6ff; --peach:#fff0c2; --pink:#c9d3ff;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#151a3d;--grid:#232a5c;--paper:#232a5c;--ink:#eef1ff;--soft:#b9c2ee;--lilac:#7b6be0;--mint:#3f6fc4;--peach:#a8842f;--pink:#5b6fd6;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#151a3d;--grid:#232a5c;--paper:#232a5c;--ink:#eef1ff;--soft:#b9c2ee;--lilac:#7b6be0;--mint:#3f6fc4;--peach:#a8842f;--pink:#5b6fd6;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;color:var(--ink);font-family:"Figtree",system-ui,sans-serif;line-height:1.55;padding:28px 14px 60px}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0;line-height:1.1}
+.wrap{max-width:880px;margin:0 auto}
+.box{background:var(--paper);border:3px solid var(--ink);border-radius:30px;box-shadow:7px 7px 0 var(--lilac)}
+
+/* header */
+.head{display:grid;grid-template-columns:150px 1fr;gap:22px;padding:22px;align-items:center}
+.avatar{width:150px;height:150px;border-radius:50%;border:3px solid var(--ink);box-shadow:0 0 0 6px var(--peach),0 0 0 9px var(--ink);background:radial-gradient(circle at 30% 30%,var(--mint),var(--lilac));display:grid;place-items:center;font:800 56px "Bricolage Grotesque",sans-serif;position:relative;overflow:hidden}
+.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.head h1{font-size:clamp(34px,6vw,54px);font-weight:800}
+.head p{margin:8px 0 12px;color:var(--soft);max-width:44ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-weight:600;font-size:14px;background:var(--peach)}
+.chip.m{background:var(--mint)}.chip.l{background:var(--lilac)}
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-weight:600}
+.dot{width:12px;height:12px;border-radius:50%;background:#8fe3b5;border:2px solid var(--ink)}
+
+/* tabs */
+.tabs{display:flex;gap:10px;margin:26px 0 18px;flex-wrap:wrap}
+.tab{font:700 17px "Bricolage Grotesque",sans-serif;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:20px;padding:8px 20px;cursor:pointer;box-shadow:4px 4px 0 var(--lilac);transition:transform .12s,box-shadow .12s}
+.tab:hover{transform:translate(-1px,-1px)}
+.tab[aria-selected="true"]{background:var(--pink);color:#5a4fa8;transform:translate(3px,3px);box-shadow:1px 1px 0 var(--lilac)}
+.tab:focus-visible,.btn:focus-visible,.pol:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+section[hidden]{display:none}
+
+/* portfolio */
+.polas{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:30px 24px;padding:8px 6px}
+.pol{background:#fffdff;color:#5a4fa8;border:3px solid #5a4fa8;border-radius:6px;padding:12px 12px 10px;box-shadow:5px 5px 0 #c9d3ff;position:relative;transform:rotate(var(--r,0deg));transition:transform .2s;text-decoration:none;display:block}
+.pol:hover{transform:rotate(0) scale(1.03)}
+.pol::before{content:"";position:absolute;top:-14px;left:50%;width:70px;height:24px;margin-left:-35px;background:var(--tape,#c9d3ff);opacity:.85;border:2px solid #5a4fa8;transform:rotate(-3deg)}
+.pic{aspect-ratio:1/1;border:2px solid #5a4fa8;display:grid;place-items:center;font:700 15px "Bricolage Grotesque",sans-serif;text-align:center;padding:10px;background:var(--g)}
+.pic img{width:100%;height:100%;object-fit:cover}
+.pol h3{font-size:17px;margin-top:10px}
+.pol span{font-size:14px;color:#6c66ad}
+
+/* prices */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
+.plan{padding:20px;display:flex;flex-direction:column;gap:10px}
+.plan:nth-child(1){background:var(--mint)}.plan:nth-child(2){background:var(--peach)}.plan:nth-child(3){background:var(--lilac)}
+.plan,.plan *{color:#5a4fa8}
+.plan h3{font-size:24px}
+.price{font:800 34px "Bricolage Grotesque",sans-serif}
+.price small{font:600 14px "Figtree",sans-serif}
+.plan ul{margin:0;padding-left:20px}
+.plan li{margin:3px 0}
+.note{margin:24px 0 0;padding:18px 22px}
+.note h3{font-size:20px;margin-bottom:8px}
+.note ul{margin:0;padding-left:20px}
+
+/* info */
+.info{padding:22px}
+.info h3{font-size:22px;margin:0 0 8px}
+.info ol{margin:0 0 18px;padding-left:22px}
+.info li{margin:4px 0}
+
+/* contact */
+.contact{margin-top:30px;padding:22px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:var(--pink)}
+.contact,.contact h2{color:#5a4fa8}
+.contact h2{font-size:26px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:700 16px "Bricolage Grotesque",sans-serif;text-decoration:none;color:#5a4fa8;background:#fffdff;border:3px solid #5a4fa8;border-radius:18px;padding:8px 18px;box-shadow:3px 3px 0 #c9d3ff}
+.btn:hover{background:#cfe6ff}
+footer{text-align:center;margin-top:26px;color:var(--soft);font-size:14px}
+@media (max-width:620px){.head{grid-template-columns:1fr;text-align:center;justify-items:center}.chips{justify-content:center}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:root{--text:#2b2466}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--text:#eef1ff}:root:not([data-theme="light"]) .plan,:root:not([data-theme="light"]) .plan *{color:#ffffff}}
+:root[data-theme="dark"]{--text:#eef1ff}
+:root[data-theme="dark"] .plan,:root[data-theme="dark"] .plan *{color:#ffffff}
+#harga,#aturan{color:var(--text)}
+.contact,.contact h2{color:var(--text)}
+.contact h2{font-size:30px}
+.custom p{margin:0 0 14px}
+.custom .btns{margin-bottom:14px}
+.custom .btn.main{background:var(--pink);}
+.plan,.plan *{color:#2b2466}
+:root[data-theme="dark"] .plan,:root[data-theme="dark"] .plan *{color:#ffffff}
+
+
+.polas{align-items:start}
+.avatar{border-width:5px;box-shadow:none}
+.pol[hidden]{display:none}
+.pol.wide{grid-column:span 2}
+.pic.has{padding:0;background:#fbf9fc;overflow:hidden}
+.pic.has img{display:block}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 6px 26px}
+.fchip{font:600 15px "Figtree",sans-serif;color:var(--text);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:5px 15px;cursor:pointer}
+.fchip[aria-pressed="true"]{background:var(--lilac);font-weight:700}
+.fchip:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+#lb{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:rgba(43,36,102,.88);cursor:zoom-out}
+#lb[hidden]{display:none}
+#lb img{max-width:min(100%,1000px);max-height:88vh;border:3px solid #fffdff;border-radius:14px;background:#fffdff}
+@media (max-width:520px){.pol.wide{grid-column:auto}}
+.head.vg{display:block;padding:0;overflow:hidden}
+.vg .banner{aspect-ratio:3/1;border-bottom:3px solid var(--ink);background:#cfe6ff}
+.vg .banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 42%}
+.vg .who{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:start;padding:0 24px 24px}
+.vg .avatar{margin-top:-72px;z-index:1}
+.vg .who>div:last-child{padding-top:14px}
+@media (max-width:620px){.vg .banner{aspect-ratio:2/1}.vg .who{grid-template-columns:1fr;justify-items:center;text-align:center;padding:0 18px 22px}}
+.polas{display:flex;gap:28px;align-items:flex-start;padding:8px 6px}
+.polas .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:38px;padding-top:16px}
+.polas .pol{width:100%}
+.filterbar{position:relative;display:flex;align-items:center;gap:12px;margin:0 6px 26px;flex-wrap:wrap}
+.ftoggle{display:inline-flex;align-items:center;gap:8px;font:700 16px "Bricolage Grotesque",sans-serif;color:var(--text);background:var(--paper);border:3px solid var(--ink);border-radius:999px;padding:7px 16px;cursor:pointer;box-shadow:4px 4px 0 var(--lilac)}
+.ftoggle svg{width:18px;height:18px;flex:none}
+.ftoggle .chev{width:16px;height:16px;transition:transform .15s}
+.ftoggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.ftoggle:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+.fcount{font-weight:600;color:var(--text);opacity:.8}
+.filters{position:absolute;top:calc(100% + 8px);left:0;z-index:20;min-width:240px;display:grid;gap:2px;margin:0;padding:8px;background:var(--paper);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--lilac)}
+.filters[hidden]{display:none}
+.fchip{border:none;border-radius:12px;padding:9px 12px;text-align:left;width:100%;background:transparent;display:flex;justify-content:space-between;gap:12px;font-weight:600}
+.fchip:hover{background:var(--grid)}
+.fchip[aria-pressed="true"]{background:var(--lilac);font-weight:700}
+.fchip[aria-pressed="true"]::after{content:"\2713"}
+
+.emptycard{position:relative;background:#fffdff;color:#5a4fa8;border:3px solid #5a4fa8;border-radius:6px;padding:12px 12px 10px;box-shadow:5px 5px 0 #c9d3ff;transform:rotate(-1.6deg);width:min(300px,100%);margin:18px 6px 26px}
+.emptycard[hidden]{display:none}
+.emptycard::before{content:"";position:absolute;top:-14px;left:50%;width:70px;height:24px;margin-left:-35px;background:#ffd9ec;opacity:.85;border:2px solid #5a4fa8;transform:rotate(-3deg)}
+.emptycard h3{font-size:17px;margin-top:10px}
+.emptycard span{font-size:14px;color:#6c66ad}
+html.intro-open,html.intro-open body{overflow:hidden}
+#intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;overflow:hidden;color:var(--text);
+ background:radial-gradient(circle at 18% 14%,var(--mint) 0,transparent 42%),radial-gradient(circle at 86% 84%,var(--pink) 0,transparent 44%),radial-gradient(circle at 84% 12%,var(--peach) 0,transparent 34%),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--bg);
+ background-size:auto,auto,auto,28px 28px,28px 28px,auto;
+ transition:transform .85s cubic-bezier(.7,0,.2,1),opacity .85s}
+#intro[hidden]{display:none}
+#intro.leave{transform:translateY(-105%);opacity:.4}
+.isparks{position:absolute;inset:0;pointer-events:none}
+.sp{position:absolute;animation:twinkle var(--d,3s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+.sp svg{width:100%;height:100%;display:block}
+@keyframes twinkle{0%,100%{transform:translateY(0) scale(.5) rotate(0);opacity:.3}50%{transform:translateY(-14px) scale(1.1) rotate(25deg);opacity:1}}
+.icard{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.iavatar{position:relative;width:170px;height:170px;border-radius:50%;border:5px solid var(--ink);background:var(--lilac);box-shadow:8px 8px 0 var(--lilac);animation:bob 3.2s ease-in-out infinite}
+.iavatar img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;border-radius:50%;display:block}
+.orbit{position:absolute;inset:-16px;border:3px dashed var(--ink);border-radius:50%;opacity:.55;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.iname{margin:30px 0 8px;font:800 clamp(52px,13vw,96px)/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em}
+.iname span{display:inline-block;animation:wave 1.9s ease-in-out infinite;animation-delay:calc(var(--i)*.12s)}
+@keyframes wave{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-14px)}}
+.itag{margin:0 0 26px;font-weight:600;opacity:.85;max-width:34ch}
+.enter{font:800 22px "Bricolage Grotesque",sans-serif;color:var(--text);background:var(--pink);border:3px solid var(--ink);border-radius:999px;padding:13px 40px;cursor:pointer;box-shadow:5px 5px 0 var(--lilac);animation:pulse 1.8s ease-in-out infinite}
+.enter:hover{transform:translate(-2px,-2px)}
+@keyframes pulse{0%,100%{box-shadow:5px 5px 0 var(--lilac),0 0 0 0 rgba(150,160,255,.45)}50%{box-shadow:5px 5px 0 var(--lilac),0 0 0 14px rgba(150,160,255,0)}}
+.ipills{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.ipill{font:700 15px "Bricolage Grotesque",sans-serif;color:var(--text);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+.ipill:hover{background:var(--lilac)}
+.enter:focus-visible,.ipill:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){#intro,#intro *{animation:none!important;transition:none!important}}
+.isocial{display:flex;gap:18px;margin-top:26px;flex-wrap:wrap;justify-content:center}
+.isocial a{font:700 15px "Bricolage Grotesque",sans-serif;color:var(--text);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+.isocial a:hover{text-decoration-style:wavy}
+.isocial a:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+
+:root{--wall:#efe9ff;--wl-dots:rgba(255,255,255,.6);--wl-str:rgba(201,211,255,.4);--wl-vig:rgba(90,79,168,.14);--wl-spot:rgba(255,255,255,.6);
+ --wall-img:radial-gradient(ellipse at 50% 15%,transparent 50%,var(--wl-vig) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .6 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(circle,var(--wl-dots) 2px,transparent 2.6px),repeating-linear-gradient(90deg,transparent 0 46px,var(--wl-str) 46px 92px);
+ --wall-size:100% 100%,200px 200px,36px 36px,auto}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wall:#1d1a45;--wl-dots:rgba(255,255,255,.05);--wl-str:rgba(123,107,224,.15);--wl-vig:rgba(0,0,0,.42);--wl-spot:rgba(140,130,255,.14)}}
+:root[data-theme="dark"]{--wall:#1d1a45;--wl-dots:rgba(255,255,255,.05);--wl-str:rgba(123,107,224,.15);--wl-vig:rgba(0,0,0,.42);--wl-spot:rgba(140,130,255,.14)}
+body{background-color:var(--wall);background-image:var(--wall-img);background-size:var(--wall-size)}
+#intro{background-color:var(--wall);background-image:radial-gradient(circle at 50% 45%,var(--wl-spot),transparent 60%),var(--wall-img);background-size:100% 100%,var(--wall-size)}
+.iavatar{width:210px;height:auto;border-radius:6px;border:3px solid #5a4fa8;background:#fffdff;padding:12px 12px 48px;box-shadow:8px 8px 0 #c9d3ff;transform:rotate(-3deg);animation:sway 4.5s ease-in-out infinite}
+.iavatar img{width:100%;height:auto;aspect-ratio:1;border-radius:0;border:2px solid #5a4fa8;object-position:50% 25%}
+.iavatar::before,.mini::before{content:"";position:absolute;top:-14px;left:50%;width:74px;height:24px;margin-left:-37px;background:#ffd9ec;opacity:.88;border:2px solid #5a4fa8;transform:rotate(-3deg)}
+.icap{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:800 21px "Bricolage Grotesque",sans-serif;color:#5a4fa8}
+@keyframes sway{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(2.5deg) translateY(-10px)}}
+.mini{position:absolute;width:var(--w,90px);background:#fffdff;border:2px solid #5a4fa8;border-radius:4px;padding:6px 6px 20px;box-shadow:4px 4px 0 #c9d3ff;transform:rotate(var(--r,0deg));animation:drift var(--d,5s) ease-in-out infinite;opacity:.92}
+.mini::before{width:44px;height:15px;margin-left:-22px;top:-9px;background:#cfe6ff}
+.mini img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border:2px solid #5a4fa8}
+@keyframes drift{0%,100%{transform:rotate(var(--r,0deg)) translateY(0)}50%{transform:rotate(calc(var(--r,0deg) + 3deg)) translateY(-10px)}}
+@media (max-width:600px){.mini{width:calc(var(--w,90px)*.6)}.iavatar{width:180px}}
+
+#intro{background:var(--wall)}
+.iwall{position:absolute;inset:-16px;background-color:var(--wall);background-image:radial-gradient(circle at 50% 45%,var(--wl-spot),transparent 60%),var(--wall-img);background-size:100% 100%,var(--wall-size);filter:blur(3px)}
+.pcv{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.isparks{z-index:0}
+.icard{z-index:2}
+.mini{filter:blur(1.4px)}
+body{background:var(--wall)}
+body::before{content:"";position:fixed;inset:-16px;z-index:-1;pointer-events:none;background-color:var(--wall);background-image:var(--wall-img);background-size:var(--wall-size);filter:blur(1.6px)}
+.homebtn{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;z-index:30;display:inline-flex;align-items:center;gap:7px;font:700 15px "Bricolage Grotesque",sans-serif;color:var(--text);background:var(--paper);border:3px solid var(--ink);border-radius:999px;padding:6px 14px 6px 11px;cursor:pointer;box-shadow:3px 3px 0 var(--lilac)}
+.homebtn svg{width:18px;height:18px}
+.homebtn:hover{background:var(--lilac)}
+.homebtn:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
+html.intro-open .homebtn{display:none}
+#harga,#aturan{animation:panelIn .4s ease-out backwards}
+@keyframes panelIn{from{opacity:0}to{opacity:1}}
+.polas.animate .pol{animation:pop .55s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--k,0)*.05s)}
+@keyframes pop{from{opacity:0;transform:translateY(28px) scale(.9) rotate(var(--r,0deg))}to{opacity:1;transform:translateY(0) scale(1) rotate(var(--r,0deg))}}
+.plan{animation:cardIn .55s cubic-bezier(.2,.8,.2,1) backwards}
+.plans .plan:nth-child(2){animation-delay:.08s}
+.plans .plan:nth-child(3){animation-delay:.16s}
+.note,.info{animation:cardIn .55s .2s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.filters{animation:menuIn .2s ease-out}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px) scale(.97)}to{opacity:1;transform:none}}
+#lb{animation:fadeIn .25s ease-out}
+#lb img{animation:zoomIn .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes zoomIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#portfolio,#harga,#aturan,.polas.animate .pol,.plan,.note,.info,.filters,#lb,#lb img{animation:none!important}}
+.mini i{display:block;width:100%;aspect-ratio:1;border:2px solid #5a4fa8}
+.fchip{transition:transform .12s,box-shadow .12s,background .12s}
+.fchip:hover,.fchip:focus-visible{background:var(--paper);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--lilac);transform:translate(-2px,-2px);outline:none}
+.fchip:active{transform:translate(0,0);box-shadow:inset 0 0 0 2px var(--ink),0 0 0 var(--lilac)}
+.ftoggle{transition:transform .12s,box-shadow .12s}
+.ftoggle:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--lilac)}
+.ftoggle:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--lilac)}
+.filters{box-shadow:6px 6px 0 var(--lilac)}
+html{scrollbar-gutter:stable}
+</style>
+</head>
+<body>
+<div id="intro" role="dialog" aria-label="Welcome">
+  <div class="iwall" aria-hidden="true"></div>
+  <canvas class="pcv" aria-hidden="true"></canvas>
+  <div class="isparks" aria-hidden="true"></div>
+  <div class="icard">
+    <div class="iavatar"><img alt="Elvena"><span class="icap">Elvena &#9825;</span></div>
+    <h1 class="iname" aria-label="Elvena"><span style="--i:0">E</span><span style="--i:1">l</span><span style="--i:2">v</span><span style="--i:3">e</span><span style="--i:4">n</span><span style="--i:5">a</span></h1>
+    <p class="itag">Freelance artist &middot; Live2D &middot; Emotes &middot; Commissions</p>
+    <button class="enter" id="enter" data-enter="portfolio">Enter <span aria-hidden="true">&#9825;</span></button>
+    <div class="isocial">
+      <a href="https://discord.com/users/1400383885162053693" target="_blank" rel="noopener">Discord</a>
+      <a href="https://x.com/ItsmeELvena" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://ko-fi.com/elvenaaa" target="_blank" rel="noopener">Ko-fi</a>
+    </div>
+  </div>
+</div>
+<button class="homebtn" id="homebtn" aria-label="Back to the start screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></button>
+<div class="wrap">
+
+  <header class="box head vg">
+    <div class="banner"><img src="images/01-banner.jpg" alt="Banner: Elvena, a wolf-eared character with blue hair winking"></div>
+    <div class="who">
+    <!-- Replace with your photo: <img src="data:..." alt="Profile photo"> -->
+    <div class="avatar"><img src="images/02-avatar.jpg" alt="Elvena, a wolf-eared character with blue and indigo hair"></div>
+    <div>
+      <h1>Elvena</h1>
+      <p>Freelance artist drawing characters, illustrations, and creative assets, plus Live2D models and rigging for VTubers. Part-time barista.</p>
+      <div class="chips">
+        <span class="chip">Character illustration</span>
+        <span class="chip m">Anime style</span>
+        <span class="chip" style="background:var(--pink)">Live2D rigging</span>
+        <span class="chip l">Commission</span>
+      </div>
+      <div class="status"><span class="dot"></span>Commissions open</div>
+    </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Menu">
+    <button class="tab" role="tab" id="t-portfolio" aria-controls="portfolio" aria-selected="true">Portfolio</button>
+    <button class="tab" role="tab" id="t-harga" aria-controls="harga" aria-selected="false">Prices</button>
+    <button class="tab" role="tab" id="t-aturan" aria-controls="aturan" aria-selected="false">Rules</button>
+  </nav>
+
+  <section id="portfolio" role="tabpanel" aria-labelledby="t-portfolio">
+            <div class="filterbar">
+      <button class="ftoggle" id="ftoggle" aria-expanded="false" aria-controls="fmenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span id="flabel">Filter: All</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <span class="fcount" id="fcount"></span>
+      <div class="filters" id="fmenu" role="group" aria-label="Filter portfolio" hidden>
+      <button class="fchip" data-f="all" aria-pressed="true">All</button>
+      <button class="fchip" data-f="live2d" aria-pressed="false">Live2D</button>
+      <button class="fchip" data-f="emote" aria-pressed="false">Emotes</button>
+      <button class="fchip" data-f="mascot" aria-pressed="false">Mascot</button>
+      <button class="fchip" data-f="logo" aria-pressed="false">Logo and sheets</button>
+      <button class="fchip" data-f="illus" aria-pressed="false">Illustrations</button>
+      <button class="fchip" data-f="banner" aria-pressed="false">Banners and overlays</button>
+      </div>
+    </div>
+    <div class="emptycard" id="empty" hidden>
+      <div class="pic" style="--g:linear-gradient(135deg,#ffd9ec,#ddd0ff);aspect-ratio:4/3">Coming soon</div>
+      <h3>Nothing here yet</h3>
+      <span>New works will be added soon</span>
+    </div>
+    <div class="polas">
+      <a class="pol" href="#" data-cat="live2d" style="--r:-1.6deg;--tape:#ffd9ec"><div class="pic has" style="aspect-ratio:560/315"><img src="images/03-live2d-model-mabel.webp" alt="Live2D model - Mabel (Live2D showcase animation)" style="object-fit:cover"></div><h3>Live2D model - Mabel</h3><span>Live2D showcase</span></a>
+      <a class="pol" href="#" data-cat="live2d" style="--r:1.6deg;--tape:#ddd0ff"><div class="pic has" style="aspect-ratio:560/315"><img src="images/04-live2d-model-elvena.webp" alt="Live2D model - Elvena (Live2D showcase animation)" style="object-fit:cover"></div><h3>Live2D model - Elvena</h3><span>Live2D showcase</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:-1.6deg;--tape:#cfe6ff"><div class="pic has" style="aspect-ratio:576/652"><img src="images/05-custom-emote-elvenaa.jpg" alt="Custom emote - Elvenaa (Emote, heart pose)" style="object-fit:contain;object-position:50% 20%"></div><h3>Custom emote - Elvenaa</h3><span>Emote, heart pose</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:1.6deg;--tape:#fff0c2"><div class="pic has" style="aspect-ratio:900/338"><img src="images/06-custom-emotes-khalil-akagi.jpg" alt="Custom emotes - Khalil Akagi (Emote set)" style="object-fit:contain;object-position:50% 50%"></div><h3>Custom emotes - Khalil Akagi</h3><span>Emote set</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:-1.6deg;--tape:#ddd0ff"><div class="pic has" style="aspect-ratio:900/325"><img src="images/07-custom-emotes-mabel-madness-s.jpg" alt="Custom emotes - Mabel Madness's (Emote set)" style="object-fit:contain;object-position:50% 50%"></div><h3>Custom emotes - Mabel Madness's</h3><span>Emote set</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:1.6deg;--tape:#c9d3ff"><div class="pic has" style="aspect-ratio:900/334"><img src="images/08-custom-emotes-minkstrex.jpg" alt="Custom emotes - Minkstrex (Emote set)" style="object-fit:contain;object-position:50% 50%"></div><h3>Custom emotes - Minkstrex</h3><span>Emote set</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:-1.6deg;--tape:#ffd9ec"><div class="pic has" style="aspect-ratio:900/432"><img src="images/09-custom-emotes-minkstrex.jpg" alt="Custom emotes - Minkstrex (Animal emote set)" style="object-fit:contain;object-position:50% 50%"></div><h3>Custom emotes - Minkstrex</h3><span>Animal emote set</span></a>
+      <a class="pol" href="#" data-cat="emote" style="--r:1.6deg;--tape:#cfe6ff"><div class="pic has" style="aspect-ratio:900/473"><img src="images/10-custom-emotes-umi-vt.jpg" alt="Custom emotes - Umi Vt (Raid emotes)" style="object-fit:contain;object-position:50% 50%"></div><h3>Custom emotes - Umi Vt</h3><span>Raid emotes</span></a>
+      <a class="pol" href="#" data-cat="logo" style="--r:-1.6deg;--tape:#fff0c2"><div class="pic has" style="aspect-ratio:900/476"><img src="images/11-logo-design-elvenaa.jpg" alt="Logo design - Elvenaa (Animated logo)" style="object-fit:contain;object-position:50% 50%"></div><h3>Logo design - Elvenaa</h3><span>Animated logo</span></a>
+      <a class="pol" href="#" data-cat="logo" style="--r:1.6deg;--tape:#ddd0ff"><div class="pic has" style="aspect-ratio:900/483"><img src="images/12-character-sheet-minkstrex.jpg" alt="Character sheet - Minkstrex (Character design)" style="object-fit:contain;object-position:50% 50%"></div><h3>Character sheet - Minkstrex</h3><span>Character design</span></a>
+      <a class="pol" href="#" data-cat="illus" style="--r:-1.6deg;--tape:#ffd9ec"><div class="pic has" style="aspect-ratio:565/800"><img src="images/13-pfp-mabel.jpg" alt="PFP - Mabel (Illustration commission)" style="object-fit:cover;object-position:50% 20%"></div><h3>PFP - Mabel</h3><span>Illustration commission</span></a>
+      <a class="pol" href="#" data-cat="illus" style="--r:1.6deg;--tape:#c9d3ff"><div class="pic has" style="aspect-ratio:565/800"><img src="images/14-nekoo.jpg" alt="Nekoo (Illustration commission)" style="object-fit:cover;object-position:50% 20%"></div><h3>Nekoo</h3><span>Illustration commission</span></a>
+      <a class="pol" href="#" data-cat="illus" style="--r:-1.6deg;--tape:#cfe6ff"><div class="pic has" style="aspect-ratio:800/800"><img src="images/15-elvena.jpg" alt="Elvena (Profile picture)" style="object-fit:cover;object-position:50% 50%"></div><h3>Elvena</h3><span>Profile picture</span></a>
+      <a class="pol" href="#" data-cat="banner" style="--r:1.6deg;--tape:#fff0c2"><div class="pic has" style="aspect-ratio:900/300"><img src="images/16-eye-banner-arias.jpg" alt="Eye banner - Arias (Full project banner)" style="object-fit:cover;object-position:50% 50%"></div><h3>Eye banner - Arias</h3><span>Full project banner</span></a>
+      <a class="pol" href="#" data-cat="banner" style="--r:-1.6deg;--tape:#ddd0ff"><div class="pic has" style="aspect-ratio:900/599"><img src="images/17-stream-overlay-elvena.jpg" alt="Stream overlay - Elvena (Starting soon screen)" style="object-fit:cover;object-position:50% 50%"></div><h3>Stream overlay - Elvena</h3><span>Starting soon screen</span></a>
+      <a class="pol" href="#" data-cat="banner" style="--r:1.6deg;--tape:#ffd9ec"><div class="pic has" style="aspect-ratio:900/360"><img src="images/18-banner-nekoo.jpg" alt="Banner - Nekoo (Commission banner)" style="object-fit:cover;object-position:50% 50%"></div><h3>Banner - Nekoo</h3><span>Commission banner</span></a>
+    </div>
+  </section>
+
+  <section id="harga" role="tabpanel" aria-labelledby="t-harga" hidden>
+    <h2 style="margin:4px 0 16px;font-size:26px">Illustration</h2>
+    <div class="plans">
+      <article class="box plan">
+        <h3>Icon</h3>
+        <div class="price">$5 <small>starting at</small></div>
+        <ul><li>Headshot, full color</li><li>1 character</li><li>Done in 3 to 5 days</li></ul>
+      </article>
+      <article class="box plan">
+        <h3>Half body</h3>
+        <div class="price">$10 <small>starting at</small></div>
+        <ul><li>Waist-up, full color</li><li>1 character</li><li>Done in 5 to 7 days</li></ul>
+      </article>
+      <article class="box plan">
+        <h3>Full body</h3>
+        <div class="price">$18 <small>starting at</small></div>
+        <ul><li>Full figure with a simple background</li><li>1 character</li><li>Done in 7 to 10 days</li></ul>
+      </article>
+    </div>
+    <h2 style="margin:34px 0 16px;font-size:26px">Live2D and rigging</h2>
+    <div class="plans">
+      <article class="box plan">
+        <h3>Basic rig</h3>
+        <div class="price">$25 <small>starting at</small></div>
+        <ul><li>Headshot model</li><li>Blinking, eye and mouth movement</li><li>Done in 5 to 7 days</li></ul>
+      </article>
+      <article class="box plan">
+        <h3>Standard rig</h3>
+        <div class="price">$55 <small>starting at</small></div>
+        <ul><li>Half body model</li><li>Hair physics and arm movement</li><li>Done in 10 to 14 days</li></ul>
+      </article>
+      <article class="box plan">
+        <h3>Full rig</h3>
+        <div class="price">$110 <small>starting at</small></div>
+        <ul><li>Full body model</li><li>Full physics and extra expressions</li><li>Done in 3 to 4 weeks</li></ul>
+      </article>
+    </div>
+    <div class="box note">
+      <h3>Rigging notes</h3>
+      <ul>
+        <li>Rigging needs a layered PSD file. Layer splitting from a flat image is an add-on.</li>
+        <li>Bundle: illustration plus rigging for a lower total price.</li>
+        <li>Extra expressions or toggles: from $3 each.</li>
+      </ul>
+    </div>
+    <div class="box note">
+      <h3>Add-ons</h3>
+      <ul>
+        <li>Extra character: +50% each</li>
+        <li>Detailed background: from $5</li>
+        <li>Commercial use: +100% of the base price</li>
+      </ul>
+    </div>
+    <div class="box note custom">
+      <h3>Custom commission</h3>
+      <p>Need something outside the packages? Pick a type below and tell me your idea. I will send you a quote.</p>
+      <div class="btns">
+        <a class="btn" href="#portfolio" data-go="emote">Emotes</a>
+        <a class="btn" href="#portfolio" data-go="mascot">Mascot</a>
+        <a class="btn" href="#portfolio" data-go="banner">Stream assets</a>
+        <a class="btn" href="#portfolio" data-go="live2d">VTuber bundle</a>
+        <a class="btn" href="#portfolio" data-go="all">Something else</a>
+      </div>
+      <a class="btn main" href="https://x.com/ItsmeELvena" target="_blank" rel="noopener">Ask for a quote</a>
+    </div>
+  </section>
+
+  <section id="aturan" role="tabpanel" aria-labelledby="t-aturan" hidden>
+    <div class="box info">
+      <h3>How to order</h3>
+      <ol>
+        <li>Send a message and tell me which commission type you want.</li>
+        <li>Send character references and the mood you have in mind.</li>
+        <li>Pay a 50% deposit once the price is agreed.</li>
+        <li>Receive the sketch, request revisions, then pay the rest and get the final files.</li>
+      </ol>
+      <h3>Quick rules</h3>
+      <ol>
+        <li>Up to 2 free revisions at the sketch stage.</li>
+        <li>Personal use is fine. Ask first for commercial use.</li>
+        <li>I may decline certain content.</li>
+        <li>Deposits are non-refundable once work has started.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="box contact">
+    <h2>Want a drawing?</h2>
+    <div class="btns">
+      <a class="btn" href="https://discord.com/users/1400383885162053693" target="_blank" rel="noopener">Discord</a>
+      <a class="btn" href="https://x.com/ItsmeELvena" target="_blank" rel="noopener">Twitter</a>
+      <a class="btn" href="https://ko-fi.com/elvenaaa" target="_blank" rel="noopener">Ko-fi</a>
+      <a class="btn" href="https://x.com/ItsmeELvena" target="_blank" rel="noopener">Custom commission</a>
+    </div>
+  </div>
+
+  <footer>Made with love by Elvena</footer>
+</div>
+
+<script>
+(function(){
+  var names=["portfolio","harga","aturan"];
+  function show(n){
+    if(names.indexOf(n)<0)n="portfolio";
+    names.forEach(function(x){
+      document.getElementById(x).hidden=(x!==n);
+      document.getElementById("t-"+x).setAttribute("aria-selected",x===n?"true":"false");
+    });
+  }
+  names.forEach(function(x){
+    document.getElementById("t-"+x).addEventListener("click",function(){
+      try{history.replaceState(null,"","#"+x)}catch(e){location.hash=x}
+      show(x);
+    });
+  });
+  window.addEventListener("hashchange",function(){show(location.hash.slice(1))});
+  show(location.hash.slice(1));
+})();
+</script>
+<div id="lb" hidden><img alt=""></div>
+<script>
+(function(){
+  var pols=[].slice.call(document.querySelectorAll(".pol")),chips=[].slice.call(document.querySelectorAll(".fchip"));
+  chips.forEach(function(c){c.addEventListener("click",function(){
+    chips.forEach(function(x){x.setAttribute("aria-pressed",x===c?"true":"false")});
+    var f=c.getAttribute("data-f");
+    pols.forEach(function(p){p.hidden=!(f==="all"||(" "+p.getAttribute("data-cat")+" ").indexOf(" "+f+" ")>=0)});
+  })});
+  var lb=document.getElementById("lb"),lbi=lb.querySelector("img");
+  pols.forEach(function(p){p.addEventListener("click",function(e){
+    e.preventDefault();var im=p.querySelector("img");if(!im)return;
+    lbi.src=im.src;lbi.alt=im.alt;lb.hidden=false;
+  })});
+  lb.addEventListener("click",function(){lb.hidden=true});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")lb.hidden=true});
+})();
+</script>
+<script>
+(function(){
+  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  [].slice.call(document.querySelectorAll("[data-go]")).forEach(function(a){
+    a.addEventListener("click",function(e){
+      e.preventDefault();
+      document.getElementById("t-portfolio").click();
+      var c=document.querySelector('.fchip[data-f="'+a.getAttribute("data-go")+'"]');
+      if(c)c.click();
+      document.querySelector(".tabs").scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  var pols=[].slice.call(document.querySelectorAll(".pol")),e=document.getElementById("empty");
+  [].slice.call(document.querySelectorAll(".fchip")).forEach(function(c){
+    c.addEventListener("click",function(){e.hidden=pols.some(function(p){return !p.hidden})});
+  });
+})();
+</script>
+<script>
+(function(){
+  var box=document.querySelector(".polas"),pols=[].slice.call(box.querySelectorAll(".pol")),cols=[],t;
+  function layout(){
+    var w=box.clientWidth;if(!w)return;
+    var n=w>=720?3:(w>=440?2:1);
+    cols.forEach(function(c){if(c.parentNode)c.parentNode.removeChild(c)});cols=[];
+    var h=[],vi=0;
+    for(var i=0;i<n;i++){var c=document.createElement("div");c.className="col";box.appendChild(c);cols.push(c);h.push(0)}
+    pols.forEach(function(p){
+      if(p.hidden)return;
+      var k=h.indexOf(Math.min.apply(null,h));
+      cols[k].appendChild(p);p.style.setProperty("--k",vi++);h[k]+=p.offsetHeight+38;
+    });
+  }
+  function later(a){clearTimeout(t);if(a===true){box.classList.add("animate");layout();return}box.classList.remove("animate");t=setTimeout(layout,0)}
+  [].slice.call(document.querySelectorAll(".fchip,.tab")).forEach(function(b){b.addEventListener("click",function(){later(true)})});
+  window.addEventListener("resize",later);window.addEventListener("hashchange",later);window.addEventListener("load",layout);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
+  layout();
+})();
+</script>
+<script>
+(function(){
+  var tg=document.getElementById("ftoggle"),menu=document.getElementById("fmenu"),lab=document.getElementById("flabel"),cnt=document.getElementById("fcount");
+  var chips=[].slice.call(menu.querySelectorAll(".fchip")),pols=[].slice.call(document.querySelectorAll(".pol"));
+  function close(){menu.hidden=true;tg.setAttribute("aria-expanded","false");tg.parentNode.classList.remove("open")}
+  function upd(){
+    var a=chips.filter(function(c){return c.getAttribute("aria-pressed")==="true"})[0];
+    lab.textContent="Filter: "+(a?a.textContent:"All");
+    var n=pols.filter(function(p){return !p.hidden}).length;
+    cnt.textContent=n+(n===1?" work":" works");
+  }
+  tg.addEventListener("click",function(e){e.stopPropagation();var opening=menu.hidden;menu.hidden=!opening;tg.setAttribute("aria-expanded",opening?"true":"false");tg.parentNode.classList.toggle("open",opening)});
+  chips.forEach(function(c){c.addEventListener("click",function(){upd();close()})});
+  document.addEventListener("click",function(e){if(!menu.hidden&&!menu.contains(e.target)&&e.target!==tg)close()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!menu.hidden){close();tg.focus()}});
+  upd();
+})();
+</script>
+<script>
+(function(){
+  var it=document.getElementById("intro"),root=document.documentElement;
+  var names=["portfolio","harga","aturan"],reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function done(){it.hidden=true;root.classList.remove("intro-open")}
+  if(names.indexOf(location.hash.slice(1))>=0)done();else root.classList.add("intro-open");
+  var src=document.querySelector(".avatar img"),img=it.querySelector(".iavatar img");
+  if(src)img.src=src.src;
+  var box=it.querySelector(".isparks");
+  var cv=it.querySelector(".pcv"),cx=cv.getContext("2d"),pc=["255,255,255"],ps=[],W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2);
+  function size(){W=it.clientWidth;H=it.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
+  function mk(anywhere){return{x:Math.random()*W,y:anywhere?Math.random()*H:H+20,r:0.8+Math.random()*1.2,s:0.2+Math.random()*0.5,a:0.55+Math.random()*0.45,c:pc[Math.floor(Math.random()*pc.length)],p:Math.random()*6.28,w:0.5+Math.random()}}
+  function init(){size();ps=[];var n=Math.round(W*H/8000);for(var i=0;i<n;i++)ps.push(mk(true))}
+  function frame(){
+    if(it.hidden)return;
+    cx.clearRect(0,0,W,H);
+    for(var i=0;i<ps.length;i++){
+      var q=ps[i];
+      if(!reduce){q.y-=q.s;q.p+=0.01*q.w;q.x+=Math.sin(q.p)*0.3}
+      if(q.y<-20){ps[i]=mk(false);q=ps[i]}
+      var g=cx.createRadialGradient(q.x,q.y,0,q.x,q.y,q.r*1.7);
+      g.addColorStop(0,"rgba("+q.c+","+q.a+")");g.addColorStop(1,"rgba("+q.c+",0)");
+      cx.fillStyle=g;cx.beginPath();cx.arc(q.x,q.y,q.r*1.7,0,6.283);cx.fill();
+    }
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  init();frame();
+  window.addEventListener("resize",function(){if(!it.hidden){init();if(reduce)frame()}});
+  var pics=[].slice.call(document.querySelectorAll('.pol:not([data-cat="live2d"]) img')),
+      spots=[[3,6,92,-8],[78,4,104,6],[1,56,80,5],[84,52,96,-6],[9,80,88,7],[72,78,100,-5]],want=["Custom emotes - Khalil Akagi","Eye banner - Arias","Character sheet - Minkstrex","Stream overlay - Elvena","Banner - Nekoo","Custom emote - Elvenaa"];
+  spots.forEach(function(sp,k){
+    var im=pics.filter(function(x){return x.alt.indexOf(want[k])===0})[0];if(!im)return;
+    var m=document.createElement("div");m.className="mini";
+    m.style.cssText="left:"+sp[0]+"%;top:"+sp[1]+"%;--w:"+sp[2]+"px;--r:"+sp[3]+"deg;--d:"+(4+k*0.6)+"s";
+    m.innerHTML='<img alt="" src="'+im.src+'">';
+    box.appendChild(m);
+  });
+  function show(){
+    it.classList.add("leave");it.hidden=false;root.classList.add("intro-open");void it.offsetWidth;
+    it.classList.remove("leave");init();frame();window.scrollTo(0,0);
+    try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+    var en=document.getElementById("enter");if(en)en.focus();
+  }
+  document.getElementById("homebtn").addEventListener("click",show);
+  function enter(tab){
+    var t=document.getElementById("t-"+tab);
+    window.scrollTo(0,0);
+    if(reduce){done();if(t)t.click();return}
+    it.classList.add("leave");
+    setTimeout(function(){if(t)t.click()},280);
+    setTimeout(done,880);
+  }
+  [].slice.call(it.querySelectorAll("[data-enter]")).forEach(function(b){
+    b.addEventListener("click",function(){enter(b.getAttribute("data-enter"))});
+  });
+  document.getElementById("enter").focus();
+})();
+</script>
+</body>
+</html>
